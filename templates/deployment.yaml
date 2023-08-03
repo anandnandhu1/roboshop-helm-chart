@@ -37,15 +37,16 @@ spec:
               name: parameter-store
           env:
             - name: ENV
-              value: {{ .Values.ENV }}
+              value: "{{ .Values.ENV }}"
             - name: COMPONENT
-              value: {{ .Values.COMPONENT }}
+              value: "{{ .Values.COMPONENT }}"
+      {{- end }}
       volumes:
         - name: parameter-store
           emptyDir:
             sizeLimit: 5Mi
       containers:
-        - name: {{ .Chart.Name }}
+        - name: "{{ .Values.COMPONENT }}"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -78,4 +79,4 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-  {{- end }}
+      {{- end }}
